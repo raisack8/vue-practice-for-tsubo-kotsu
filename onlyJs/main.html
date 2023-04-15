@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>商品一覧</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" href="main.css">
+
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <h1 class="title">商品一覧</h1>
+      <!-- 検索欄 -->
+      <div class="search">
+        <div class="search_result">
+          検索結果<span class="search_count">{{ filteredList.length }}件</span>
+        </div>
+        <div class="search_condition">
+          <input type="checkbox" v-model="check1">セール対象
+          <input type="checkbox" v-model="check2">送料無料
+          <select class="search_order" v-model.number="order">
+            <option value="0">---並べ替え---</option>
+            <option value="1">標準</option>
+            <option value="2">安い順</option>
+          </select>
+        </div>
+      </div>
+      <!-- 商品一覧 -->
+      <div class="products" >
+
+        <div class="product" v-for="(item, index) in filteredList"
+          v-bind:id="index + 1" v-bind:key="index + 1">
+          <div class="product_body">
+            <div class="product_status" v-if="item.isSale">SALE</div>
+            <img class="product_image"
+                  v-bind:src=item.image
+                  alt="">
+          </div>
+          <div class="product_detail">
+            <!-- <div class="product_name">{{ item.name }}</div> -->
+            <!-- HTMLタグを含んだ文字をマスタッシュで渡すとそのままタグが表示されてしまう -->
+            <!-- "v-html"に表示させたい文字列を記述すれば、タグも適用してくれる。 -->
+            <div class="product_name" v-html="item.name"></div>
+            <div class="product_price"><span>{{ $filters.number_format(item.price) }}</span>円(税込)</div>
+            <div class="product_shipping" v-if="item.shipping === 0">送料無料</div>
+            <div class="product_shipping" v-else>+送料{{ $filters.number_format(item.shipping) }}</div>
+          </div>
+        </div>
+
+    </div>
+  </div>
+  <script src="https://unpkg.com/vue@3.2.29/dist/vue.global.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
